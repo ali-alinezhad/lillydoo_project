@@ -1,0 +1,95 @@
+<div>
+    {{ form_start(form) }}
+    <div style="color: red">
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_firstName">
+            {{ form_label(form.firstName) }}
+        </label>
+        {{ form_widget(form.firstName) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_lastName">
+            {{ form_label(form.lastName) }}
+        </label>
+        {{ form_widget(form.lastName) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_street">
+            {{ form_label(form.street) }}
+        </label>
+        {{ form_widget(form.street) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_zipCode">
+            {{ form_label(form.zipCode) }}
+        </label>
+        {{ form_widget(form.zipCode) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_city">
+            {{ form_label(form.city) }}
+        </label>
+        {{ form_widget(form.city) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_country">
+            {{ form_label(form.country) }}
+        </label>
+        {{ form_widget(form.country) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_phoneNumber">
+            {{ form_label(form.phoneNumber) }}
+        </label>
+        {{ form_widget(form.phoneNumber) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_birthday">
+            {{ form_label(form.birthday) }}
+        </label>
+        {{ form_widget(form.birthday) }}
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="address_book_email">
+            {{ form_label(form.email) }}
+        </label>
+        {{ form_widget(form.email) }}
+    </div>
+
+    <div class="form-group">
+        <label for="address_book_picture">
+            {{ form_label(form.picture) }}
+        </label>
+        {{ form_widget(form.picture) }}
+        <div style="color: #8959A8;font-size: 12px">{{ form.picture.vars.data }}</div>
+        <span style="color: red">{{ form_errors(form.picture) }}</span>
+    </div>
+
+    <div class="form-group">
+        <label for="address_book_save">
+            {{ form_label(form.save) }}
+        </label>
+        {{ form_widget(form.save) }}
+    </div>
+    {{ form_end(form) }}
+</div>
