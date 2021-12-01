@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Mapping;
+
 /**
  * AddressBookRepository
  *
@@ -10,4 +12,8 @@ namespace AppBundle\Repository;
  */
 class AddressBookRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function __construct($em, Mapping\ClassMetadata $class)
+    {
+        parent::__construct($em, $class);
+    }
 }

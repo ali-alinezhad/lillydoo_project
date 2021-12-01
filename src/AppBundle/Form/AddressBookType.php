@@ -19,7 +19,6 @@ class AddressBookType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->setAction('/insert/contact')
             ->add('firstName', TextType::class, [
                 'label' => 'First Name',
                 'attr'  => ['class' => "form-control"]

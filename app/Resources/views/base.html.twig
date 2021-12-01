@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% include 'lauouts/css.html' %}
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% include 'lauouts/css.html' %}
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<div class="text-center p-5">
+    <div class="h3"><span>Welcome to <span class="text-danger">AddressBook</span> in</span>
+        Symfony {{ constant('Symfony\\Component\\HttpKernel\\Kernel::VERSION') }}</div>
+</div>
+<div class="wrapper">
+    <div class="container">
+        <div class="p-3">
+            <a href="{{ path('homepage') }}"><i class="fa fa-home" aria-hidden="true"></i> </a>
+        </div>
         {% block body %}{% endblock %}
-        {% include 'lauouts/js.html' %}
-        {% block javascripts %}{% endblock %}
-    </body>
+    </div>
+</div>
+{% include 'lauouts/js.html' %}
+{% block javascripts %}{% endblock %}
+</body>
 </html>
