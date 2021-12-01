@@ -7,14 +7,14 @@
                     Symfony {{ constant('Symfony\\Component\\HttpKernel\\Kernel::VERSION') }}</div>
             </div>
             <div style="padding-bottom: 10px">
-                <div>
+                <div class="success">
                     {% for message in app.flashes('success') %}
                         <div style="color: green">
                             {{ message }}
                         </div>
                     {% endfor %}
                 </div>
-                <div>
+                <div id="errors">
                     {% for message in app.flashes('errors') %}
                         <div style="color: red">
                             {{ message }}
