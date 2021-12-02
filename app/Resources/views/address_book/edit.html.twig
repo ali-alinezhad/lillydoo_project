@@ -1,5 +1,18 @@
 {% extends 'base.html.twig' %}
-{% block title %} Show Contact Details {% endblock %}
+{% block title %} Edit Contacts {% endblock %}
 {% block body %}
-    {% include "address_book/partial/form.html.twig" %}
+    {% include "address_book/partial/form.html.twig" with {'contactId': contactId} %}
+{% endblock %}
+{% block javascripts %}
+    <script type="application/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#image').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 {% endblock %}

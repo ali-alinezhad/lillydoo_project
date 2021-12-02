@@ -25,7 +25,8 @@
                     <a href="{{ path('edit.contact',{'contactId':contact.id}) }}" title="Edit">
                         <i class="text-success fa fa-edit pr-2"></i>
                     </a>
-                    <a href="{{ path('delete.contact',{'contactId': contact.id}) }}" title="Delete">
+                    <a href="{{ path('delete.contact',{'contactId': contact.id}) }}"
+                       onclick="return confirm('Delete this record?')" title="Delete">
                         <i class="text-danger fa fa-trash"></i>
                     </a>
                 </td>

@@ -6,6 +6,7 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -52,7 +53,7 @@ class AddressBookType extends AbstractType
             ])
             ->add('picture', FileType::class, [
                 'required'    => false,
-                'attr'        => ['class' => "form-control"],
+                'attr'        => ['class' => "form-control", 'onchange' => "readURL(this);"],
                 'data_class'  => null,
                 'constraints' => [
                     new File([

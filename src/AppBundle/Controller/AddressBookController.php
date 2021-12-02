@@ -111,7 +111,8 @@ class AddressBookController extends Controller
         }
 
         return $this->render('address_book/edit.html.twig', [
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
+            'contactId' => $contactId
         ]);
     }
 
@@ -168,5 +169,40 @@ class AddressBookController extends Controller
         return $this->render('address_book/details.html.twig', [
             'contact' => $contact
         ]);
+    }
+
+
+    /**
+     * @Route("/delete/{contactId}/image", name="delete.image")
+     *
+     * @param FileUploader $fileUploader
+     * @param int          $contactId
+     *
+     * @return RedirectResponse
+     */
+    public function deleteImage(FileUploader $fileUploader, int $contactId): RedirectResponse
+    {
+        $contact = $this->getDoctrine()
+            ->getRepository(AddressBook::class)
+            ->find($contactId);
+
+        if (!empty($contact)) {
+            $picture = $contact->getPicture();
+
+            if (!empty($picture)) {
+                $fileUploader->remove($picture);
+                $contact->setPicture('');
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($contact);
+                $entityManager->flush();
+            }
+            $this->addFlash('success', 'Record successfully removed!');
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        $this->addFlash('errors', 'Something went wrong!');
+
+        return $this->redirectToRoute('homepage');
     }
 }
