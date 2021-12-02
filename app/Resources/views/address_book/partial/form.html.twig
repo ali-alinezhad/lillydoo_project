@@ -81,7 +81,19 @@
             {{ form_label(form.picture) }}
         </label>
         {{ form_widget(form.picture) }}
-        <div style="color: #8959A8;font-size: 12px">{{ form.picture.vars.data }}</div>
+
+        <div class="p-2">
+            <img class="rounded-circle"
+                 src=" {% if form.picture.vars.data %}{{ asset(form.picture.vars.data) }} {% endif %}" width="100"
+                 height="100"
+                 alt="Default Image" id="image">
+            {% if form.picture.vars.data and contactId %}
+                <a href="{{ path('delete.image',{'contactId' : contactId}) }}">
+                    <i class="fa fa-trash text-danger"></i>
+                </a>
+            {% endif %}
+        </div>
+
         <span style="color: red">{{ form_errors(form.picture) }}</span>
     </div>
 

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
-    protected const IMAGE_URL = '../public/images';
+    protected const IMAGE_URL = '../web/images/';
 
 
     /**
@@ -28,7 +28,7 @@ class FileUploader
             return null;
         }
 
-        return $fileName;
+        return 'images/' . $fileName;
     }
 
 
@@ -41,7 +41,7 @@ class FileUploader
     {
         $fileSystem = new Filesystem();
         try {
-            $fileSystem->remove($this->getTargetDirectory() . '/' . $fileName);
+            $fileSystem->remove('../web/' . $fileName);
         }
         catch (FileException $e) {
             return null;
