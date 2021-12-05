@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div style="padding-bottom: 10px">
+        <div class="success">
+            {% for message in app.flashes('success') %}
+                <div style="color: green">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        <div id="errors">
+            {% for message in app.flashes('errors') %}
+                <div style="color: red">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="maxId for-testing" style="display: none">{{ maxId }}</div>
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1"><i class="text-dark fa fa-list"></i> Display contacts</a></li>
+            <li><a href="#tabs-2"><i class="fa fa-plus"></i> Add new contact <i class="glyphicon glyphicon-plus"></i>
+                </a></li>
+        </ul>
+        <div id="tabs-1">
+            <div>
+                {% include "address_book/partial/list.html.twig" %}
+            </div>
+        </div>
+        <div id="tabs-2">
+            <div class="form-address-book">
+                {% include "address_book/partial/form.html.twig" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="application/javascript">
+        $(function () {
+            $("#tabs").tabs().addClass("ui-helper-clearfix");
+            $("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
+        });
+    </script>
+    <script type="application/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#image').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+{% endblock %}
