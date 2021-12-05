@@ -16,6 +16,7 @@
             {% endfor %}
         </div>
     </div>
+    <div class="maxId for-testing" style="display: none">{{ maxId }}</div>
     <div id="tabs">
         <ul>
             <li><a href="#tabs-1"><i class="text-dark fa fa-list"></i> Display contacts</a></li>
@@ -28,7 +29,7 @@
             </div>
         </div>
         <div id="tabs-2">
-            <div>
+            <div class="form-address-book">
                 {% include "address_book/partial/form.html.twig" %}
             </div>
         </div>

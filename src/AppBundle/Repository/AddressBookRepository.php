@@ -16,4 +16,16 @@ class AddressBookRepository extends \Doctrine\ORM\EntityRepository
     {
         parent::__construct($em, $class);
     }
+
+
+    /**
+     * @return int
+     */
+    public function getMaxId()
+    {
+        $qb = $this->createQueryBuilder('ab');
+        $qb->select('ab, MAX(ab.id) as idMax');
+        $result = $qb->getQuery()->getResult();
+        return (int) reset($result)['idMax'];
+    }
 }

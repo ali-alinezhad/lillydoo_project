@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\AddressBook;
 use AppBundle\Form\AddressBookType;
+use AppBundle\Repository\AddressBookRepository;
 use AppBundle\Service\FileUploader;
+use AppBundle\Service\CommonHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,12 +20,19 @@ class AddressBookController extends Controller
     /**
      * @Route("/", name="homepage")
      *
-     * @param Request      $request
-     * @param FileUploader $fileUploader
+     * @param Request               $request
+     * @param FileUploader          $fileUploader
+     * @param AddressBookRepository $addressBookRepository
+     * @param CommonHelper          $helper
      *
      * @return RedirectResponse|Response|null
      */
-    public function index(Request $request, FileUploader $fileUploader)
+    public function index(
+        Request               $request,
+        FileUploader          $fileUploader,
+        AddressBookRepository $addressBookRepository,
+        CommonHelper          $helper
+    )
     {
         $addressBook = new AddressBook();
         $form        = $this->createForm(AddressBookType::class, $addressBook);
@@ -51,31 +60,32 @@ class AddressBookController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        $contacts = $this->getDoctrine()
-            ->getRepository(AddressBook::class)
-            ->findAll();
-
         return $this->render('address_book/index.html.twig', [
+            'maxId'    => $helper->getLastContactId(),
             'form'     => $form->createView(),
-            'contacts' => $contacts,
+            'contacts' => $addressBookRepository->findAll(),
         ]);
     }
 
 
     /**
-     * @Route("/edit/{contactId}/contact/", name="edit.contact")
+     * @Route("/edit/{contactId}/contact", name="edit.contact")
      *
-     * @param Request      $request
-     * @param FileUploader $fileUploader
-     * @param int          $contactId
+     * @param Request               $request
+     * @param FileUploader          $fileUploader
+     * @param AddressBookRepository $addressBookRepository
+     * @param int                   $contactId
      *
      * @return RedirectResponse|Response|null
      */
-    public function update(Request $request, FileUploader $fileUploader, int $contactId)
+    public function update(
+        Request               $request,
+        FileUploader          $fileUploader,
+        AddressBookRepository $addressBookRepository,
+        int                   $contactId
+    )
     {
-        $contact = $this->getDoctrine()
-            ->getRepository(AddressBook::class)
-            ->find($contactId);
+        $contact = $addressBookRepository->find($contactId);
 
         if (empty($contact)) {
             $this->addFlash('errors', 'Record does not found!');
@@ -86,27 +96,32 @@ class AddressBookController extends Controller
         $oldFile = $contact->getPicture();
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $picture */
-            $picture = $form->get('picture')->getData();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var UploadedFile $picture */
+                $picture = $form->get('picture')->getData();
 
-            if ($picture) {
-                if ($oldFile) {
-                    $fileUploader->remove($oldFile);
+                if ($picture) {
+                    if ($oldFile) {
+                        $fileUploader->remove($oldFile);
+                    }
+
+                    $fileName = $fileUploader->upload($picture);
+                    $contact->setPicture($fileName);
+                }
+                else {
+                    $contact->setPicture($oldFile);
                 }
 
-                $fileName = $fileUploader->upload($picture);
-                $contact->setPicture($fileName);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($contact);
+                $entityManager->flush();
+                $this->addFlash('success', 'Record successfully updated!');
             }
             else {
-                $contact->setPicture($oldFile);
+                $this->addFlash('errors', 'Something Went wrong!');
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($contact);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Record successfully updated!');
             return $this->redirectToRoute('homepage');
         }
 
@@ -120,16 +135,19 @@ class AddressBookController extends Controller
     /**
      * @Route("/delete/{contactId}/contact", name="delete.contact")
      *
-     * @param FileUploader $fileUploader
-     * @param int          $contactId
+     * @param FileUploader          $fileUploader
+     * @param AddressBookRepository $addressBookRepository
+     * @param int                   $contactId
      *
      * @return RedirectResponse
      */
-    public function delete(FileUploader $fileUploader, int $contactId): RedirectResponse
+    public function delete(
+        FileUploader          $fileUploader,
+        AddressBookRepository $addressBookRepository,
+        int                   $contactId
+    ): RedirectResponse
     {
-        $contact = $this->getDoctrine()
-            ->getRepository(AddressBook::class)
-            ->find($contactId);
+        $contact = $addressBookRepository->find($contactId);
 
         if (!empty($contact)) {
 
@@ -155,16 +173,17 @@ class AddressBookController extends Controller
     /**
      * @Route("/show/contact/{contactId}/details", name="show.contact.details")
      *
-     * @param Request $request
-     * @param int     $contactId
+     * @param AddressBookRepository $addressBookRepository
+     * @param int                   $contactId
      *
      * @return Response|null
      */
-    public function showDetails(Request $request, int $contactId): ?Response
+    public function showDetails(
+        AddressBookRepository $addressBookRepository,
+        int                   $contactId
+    ): ?Response
     {
-        $contact = $this->getDoctrine()
-            ->getRepository(AddressBook::class)
-            ->find($contactId);
+        $contact = $addressBookRepository->find($contactId);
 
         return $this->render('address_book/details.html.twig', [
             'contact' => $contact
@@ -175,16 +194,19 @@ class AddressBookController extends Controller
     /**
      * @Route("/delete/{contactId}/image", name="delete.image")
      *
-     * @param FileUploader $fileUploader
-     * @param int          $contactId
+     * @param FileUploader          $fileUploader
+     * @param AddressBookRepository $addressBookRepository
+     * @param int                   $contactId
      *
      * @return RedirectResponse
      */
-    public function deleteImage(FileUploader $fileUploader, int $contactId): RedirectResponse
+    public function deleteImage(
+        FileUploader          $fileUploader,
+        AddressBookRepository $addressBookRepository,
+        int                   $contactId
+    ): RedirectResponse
     {
-        $contact = $this->getDoctrine()
-            ->getRepository(AddressBook::class)
-            ->find($contactId);
+        $contact = $addressBookRepository->find($contactId);
 
         if (!empty($contact)) {
             $picture = $contact->getPicture();
