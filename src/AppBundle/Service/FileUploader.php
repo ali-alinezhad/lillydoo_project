@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
-    protected const IMAGE_URL = '../web/images/';
+    public const IMAGE_URL = '../web/images/';
 
 
     /**
@@ -18,8 +18,9 @@ class FileUploader
      */
     public function upload(UploadedFile $file): ?string
     {
+        srand(mktime());
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $fileName         = $originalFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        $fileName         = $originalFilename . '-' . rand() . '.' . $file->guessExtension();
 
         try {
             $file->move($this->getTargetDirectory(), $fileName);

@@ -1,0 +1,17 @@
+[
+    {
+        "location": "Tests\\AppBundle\\Controller\\AddressBookControllerTest::testIndex",
+        "message": "\"continue\" targeting switch is equivalent to \"break\". Did you mean to use \"continue 2\"?",
+        "count": 9
+    },
+    {
+        "location": "Tests\\AppBundle\\Service\\FileUploaderTest::testUpload",
+        "message": "mktime(): You should be using the time() function instead",
+        "count": 2
+    },
+    {
+        "location": "Tests\\AppBundle\\Service\\FileUploaderTest::testUploadWhenThrowException",
+        "message": "mktime(): You should be using the time() function instead",
+        "count": 2
+    }
+]
